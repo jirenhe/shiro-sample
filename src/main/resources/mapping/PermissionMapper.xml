@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mrj.dao.PermissionMapper">
+	<resultMap id="BaseResultMap" type="com.mrj.po.Permission">
+		<id column="permissionid" property="permissionid" jdbcType="VARCHAR" />
+		<result column="permissionname" property="permissionname"
+			jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="VoResultMap" type="com.mrj.vo.PermissionVo"
+		extends="com.mrj.dao.PermissionMapper.BaseResultMap">
+	</resultMap>
+	<sql id="Base_Column_List">
+		permissionid, permissionname, remark
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="VoResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from permission
+		where permissionid = #{permissionid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByObject" resultMap="VoResultMap"
+		parameterType="com.mrj.vo.PermissionVo">
+		select
+		<include refid="Base_Column_List" />
+		from permission
+		<where>
+			<if test="permissionid != null and permissionid != ''">
+				and permissionid = #{permissionid,jdbcType=VARCHAR}
+			</if>
+			<if test="permissionname != null and permissionname != ''">
+				and permissionname = #{permissionname,jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				and remark = #{remark,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="com.mrj.vo.PermissionVo">
+		select
+		count(*)
+		from permission
+		<where>
+			<if test="permissionid != null and permissionid != ''">
+				and permissionid = #{permissionid,jdbcType=VARCHAR}
+			</if>
+			<if test="permissionname != null and permissionname != ''">
+				and permissionname = #{permissionname,jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				and remark = #{remark,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectByUserId" resultMap="VoResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from permission t where t.permissionid in (
+		select
+		DISTINCT(p.permissionid) from permission p left join role_permission
+		rp on p.permissionid = rp.permissionid left join user_role ur on
+		ur.roleid = rp.roleid
+		where ur.userid = #{userid,jdbcType=VARCHAR})
+	</select>
+	<select id="selectByRoleId" resultMap="VoResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from permission t where t.permissionid in(
+		select p.permissionid from
+		permission p left join role_permission
+		rp on p.permissionid =
+		rp.permissionid
+		where rp.roleid = #{roleid,jdbcType=VARCHAR})
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		permission
+		where permissionid = #{permissionid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.mrj.vo.PermissionVo">
+		insert into permission
+		(permissionid, permissionname, remark
+		)
+		values
+		(#{permissionid,jdbcType=VARCHAR},
+		#{permissionname,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.mrj.vo.PermissionVo">
+		insert into permission
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="permissionid != null">
+				permissionid,
+			</if>
+			<if test="permissionname != null">
+				permissionname,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="permissionid != null">
+				#{permissionid,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionname != null">
+				#{permissionname,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.mrj.vo.PermissionVo">
+		update permission
+		<set>
+			<if test="permissionname != null">
+				permissionname = #{permissionname,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where permissionid = #{permissionid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.mrj.vo.PermissionVo">
+		update permission
+		set permissionname = #{permissionname,jdbcType=VARCHAR},
+		remark =
+		#{remark,jdbcType=VARCHAR}
+		where permissionid =
+		#{permissionid,jdbcType=VARCHAR}
+	</update>
+</mapper>

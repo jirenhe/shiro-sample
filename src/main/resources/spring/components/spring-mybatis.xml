@@ -1,0 +1,82 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+                            http://www.springframework.org/schema/beans/spring-beans.xsd    
+                            http://www.springframework.org/schema/context    
+                            http://www.springframework.org/schema/context/spring-context.xsd    
+                            http://www.springframework.org/schema/mvc    
+                            http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                            http://www.springframework.org/schema/tx    
+                            http://www.springframework.org/schema/tx/spring-tx.xsd
+                            http://www.springframework.org/schema/aop    
+                            http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties" />
+	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:spring/components/mybatisConfiguration.xml" />
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:mapping/*.xml"></property>
+	</bean>
+
+	<bean id="mybatisMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.mrj.dao.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<tx:advice id="advice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 数据插入的方法 -->
+			<tx:method name="insert*" rollback-for="Exception" />
+			<tx:method name="approve*" rollback-for="Exception" />
+			<tx:method name="reject*" rollback-for="Exception" />
+			<tx:method name="add*" rollback-for="Exception" />
+			<tx:method name="save*" rollback-for="Exception" />
+			<tx:method name="create*" rollback-for="Exception" />
+			<!-- 数据修改的方法 -->
+			<tx:method name="update*" rollback-for="Exception" />
+			<tx:method name="edit*" rollback-for="Exception" />
+			<!-- 数据删除操作 -->
+			<tx:method name="delete*" rollback-for="Exception" />
+			<tx:method name="remove*" rollback-for="Exception" />
+			<!-- 数据操作 -->
+			<tx:method name="execute" rollback-for="Exception" />
+			<tx:method name="addResourceLog" rollback-for="Exception"
+				propagation="REQUIRES_NEW" />
+			<tx:method name="execute*" rollback-for="Exception" />
+			<!-- 剩下的查询方法 -->
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- aop拦截配置,控制事务 -->
+	<aop:config proxy-target-class="true">
+		<!-- 对于给定的切入点 利用AspectJ pointcut language 自动生成一个动态代理 管理控制名为txAdvice的 advice 
+			配置的方法 -->
+		<!-- execution(* *..service..*.*(..)) 表示：所有*.service.*包下的java都受事务控制。 -->
+		<!-- execution(* *..*Service.*(..)) 表示：所有以*Service结尾的java都受事务控制 -->
+		<aop:advisor advice-ref="advice" pointcut="execution(* *..*Action.*(..))" />
+	</aop:config>
+</beans>

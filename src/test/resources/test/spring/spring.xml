@@ -1,0 +1,18 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-autowire="byName" default-lazy-init="false">
+	<!-- 支持 @Transactional 标记 -->
+	<tx:annotation-driven mode="aspectj" />
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
+	<!-- 启用类扫描机制，扫描com包下的通过元数据标记为@Component、@Resource、@Service等的Bean并自动注入 -->
+	<context:component-scan base-package="com.mrj.*">
+	</context:component-scan>
+	<!-- 支持 @AspectJ 标记 -->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<import resource="components/spring-mybatis.xml" />
+	<import resource="components/spring-shiro.xml" />
+</beans>
