@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mrj.dao.UserMapper">
-	<resultMap id="BaseResultMap" type="com.mrj.po.User">
+	<resultMap id="BaseResultMap" type="com.gihub.sample.shiro.po.User">
 		<id column="userid" property="userid" jdbcType="VARCHAR" />
 		<result column="username" property="username" jdbcType="VARCHAR" />
 		<result column="password" property="password" jdbcType="VARCHAR" />
 	</resultMap>
-	<resultMap id="VoResultMap" type="com.mrj.vo.UserVo"
+	<resultMap id="VoResultMap" type="com.gihub.sample.shiro.vo.UserVo"
 		extends="com.mrj.dao.UserMapper.BaseResultMap">
-		<collection property="roles" ofType="com.mrj.vo.RoleVo"
+		<collection property="roles" ofType="com.gihub.sample.shiro.vo.RoleVo"
 			column="userid" select="com.mrj.dao.RoleMapper.selectByUserId">
 		</collection>
-		<collection property="permissions" ofType="com.mrj.vo.PermissionVo"
+		<collection property="permissions" ofType="com.gihub.sample.shiro.vo.PermissionVo"
 			column="userid" select="com.mrj.dao.PermissionMapper.selectByUserId">
 		</collection>
 	</resultMap>
@@ -57,7 +57,7 @@
 		delete from t_user
 		where userid = #{userid,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insert" parameterType="com.mrj.vo.UserVo">
+	<insert id="insert" parameterType="com.gihub.sample.shiro.vo.UserVo">
 		insert into t_user (userid,
 		username, password
 		)
@@ -66,7 +66,7 @@
 		#{password,jdbcType=VARCHAR}
 		)
 	</insert>
-	<insert id="insertSelective" parameterType="com.mrj.vo.UserVo">
+	<insert id="insertSelective" parameterType="com.gihub.sample.shiro.vo.UserVo">
 		insert into t_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="userid != null">
@@ -91,7 +91,7 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.mrj.vo.UserVo">
+	<update id="updateByPrimaryKeySelective" parameterType="com.gihub.sample.shiro.vo.UserVo">
 		update t_user
 		<set>
 			<if test="username != null">
@@ -103,7 +103,7 @@
 		</set>
 		where userid = #{userid,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.mrj.vo.UserVo">
+	<update id="updateByPrimaryKey" parameterType="com.gihub.sample.shiro.vo.UserVo">
 		update t_user
 		set
 		username = #{username,jdbcType=VARCHAR},

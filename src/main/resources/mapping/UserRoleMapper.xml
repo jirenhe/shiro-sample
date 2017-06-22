@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mrj.dao.UserRoleMapper" >
-  <resultMap id="BaseResultMap" type="com.mrj.po.UserRole" >
+  <resultMap id="BaseResultMap" type="com.gihub.sample.shiro.po.UserRole" >
     <id column="userid" property="userid" jdbcType="VARCHAR" />
     <id column="roleid" property="roleid" jdbcType="VARCHAR" />
   </resultMap>
@@ -10,7 +10,7 @@
     where userid = #{userid,jdbcType=VARCHAR}
       and roleid = #{roleid,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteUserRole" parameterType="com.mrj.po.UserRole" >
+  <delete id="deleteUserRole" parameterType="com.gihub.sample.shiro.po.UserRole" >
     delete from user_role
     <where>
     	<if test="userid != null and userid != ''">
@@ -21,11 +21,11 @@
     	</if>
     </where>
   </delete>
-  <insert id="insert" parameterType="com.mrj.po.UserRole" >
+  <insert id="insert" parameterType="com.gihub.sample.shiro.po.UserRole" >
     insert into user_role (userid, roleid)
     values (#{userid,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.mrj.po.UserRole" >
+  <insert id="insertSelective" parameterType="com.gihub.sample.shiro.po.UserRole" >
     insert into user_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userid != null" >

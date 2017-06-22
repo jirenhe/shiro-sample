@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mrj.dao.RoleMapper">
-	<resultMap id="BaseResultMap" type="com.mrj.po.Role">
+	<resultMap id="BaseResultMap" type="com.gihub.sample.shiro.po.Role">
 		<id column="roleid" property="roleid" jdbcType="VARCHAR" />
 		<result column="rolename" property="rolename" jdbcType="VARCHAR" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 	</resultMap>
-	<resultMap id="VoResultMap" type="com.mrj.vo.RoleVo"
+	<resultMap id="VoResultMap" type="com.gihub.sample.shiro.vo.RoleVo"
 		extends="com.mrj.dao.RoleMapper.BaseResultMap">
-		<collection property="permissions" ofType="com.mrj.vo.RoleVo"
+		<collection property="permissions" ofType="com.gihub.sample.shiro.vo.RoleVo"
 			column="roleid" select="com.mrj.dao.PermissionMapper.selectByRoleId">
 		</collection>
 	</resultMap>
@@ -23,7 +23,7 @@
 		where roleid = #{roleid,jdbcType=VARCHAR}
 	</select>
 	<select id="selectByObject" resultMap="VoResultMap"
-		parameterType="com.mrj.vo.RoleVo">
+		parameterType="com.gihub.sample.shiro.vo.RoleVo">
 		select
 		<include refid="Base_Column_List" />
 		from role
@@ -40,7 +40,7 @@
 		</where>
 	</select>
 	<select id="selectCount" resultType="java.lang.Integer"
-		parameterType="com.mrj.vo.RoleVo">
+		parameterType="com.gihub.sample.shiro.vo.RoleVo">
 		select
 		count(*)
 		from role
@@ -68,7 +68,7 @@
 		delete from role
 		where roleid = #{roleid,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insert" parameterType="com.mrj.vo.RoleVo">
+	<insert id="insert" parameterType="com.gihub.sample.shiro.vo.RoleVo">
 		insert into role (roleid,
 		rolename, remark
 		)
@@ -77,7 +77,7 @@
 		#{remark,jdbcType=VARCHAR}
 		)
 	</insert>
-	<insert id="insertSelective" parameterType="com.mrj.vo.RoleVo">
+	<insert id="insertSelective" parameterType="com.gihub.sample.shiro.vo.RoleVo">
 		insert into role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="roleid != null">
@@ -102,7 +102,7 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.mrj.vo.RoleVo">
+	<update id="updateByPrimaryKeySelective" parameterType="com.gihub.sample.shiro.vo.RoleVo">
 		update role
 		<set>
 			<if test="rolename != null">
@@ -114,7 +114,7 @@
 		</set>
 		where roleid = #{roleid,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.mrj.vo.RoleVo">
+	<update id="updateByPrimaryKey" parameterType="com.gihub.sample.shiro.vo.RoleVo">
 		update role
 		set
 		rolename = #{rolename,jdbcType=VARCHAR},

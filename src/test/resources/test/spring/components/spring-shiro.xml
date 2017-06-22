@@ -31,7 +31,7 @@
 	</bean>
 
 	<!-- 項目自定义的Realm，目前仅使用非加盐非多级循环的MD5密码校验，有安全隐患，建议适时修正为SHA256等高级加密 -->
-	<bean id="myRealm" class="com.mrj.common.realm.MyRealm">
+	<bean id="myRealm" class="com.gihub.sample.shiro.common.realm.MyRealm">
 		<property name="cachingEnabled" value="true" />
         <property name="authenticationCachingEnabled" value="true"/>
         <property name="authenticationCacheName" value="authenticationCache"/>
@@ -41,7 +41,7 @@
 		<!-- MyRealm用了autowired注解注入userService上面不用配置注入配置。否则需要些getter setter方法 -->
 	</bean>
 
-	<bean id="myRealm2" class="com.mrj.common.realm.MyRealm2">
+	<bean id="myRealm2" class="com.gihub.sample.shiro.common.realm.MyRealm2">
 		<property name="cachingEnabled" value="true" />
         <property name="authenticationCachingEnabled" value="true"/>
         <property name="authenticationCacheName" value="authenticationCache"/>
